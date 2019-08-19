@@ -4,9 +4,10 @@
   <a href="/articles/new/">글 작성하기</a>
   <ul>
     {% for article in articles %}
-    <li>{{ article.title }}
-        {{ article.created_at }}
-    </li>
+    <p>{{ article.id }}</p>
+    <p>{{ article.title }}</p>
+    <p>{{ article.created_at }}</p>
+    <hr>
     {% endfor %}
   </ul>
 {% endblock %}

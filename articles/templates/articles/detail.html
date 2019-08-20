@@ -1,0 +1,10 @@
+{% extends 'articles/base.html' %}
+{% block body %}
+  <h1>{{ article.id }}번 글</h1>
+  <h2>{{ article.title }}</h2>
+  <p>작성일자 : {{ article.created_at }}</p>
+  <p>수정일자 : {{ article.updated_at }}</p>
+  <hr>
+  <p>{{ article.content }}</p>
+  <a href="/articles/">목록으로</a>
+{% endblock %}

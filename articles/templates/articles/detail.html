@@ -6,7 +6,14 @@
   <p>수정일자 : {{ article.updated_at }}</p>
   <hr>
   <p>{{ article.content }}</p>
-  <a class="btn btn-info btn-sm" href="{% url 'articles:edit' article.pk %}">수정하기</a>
-  <a class="btn btn-danger btn-sm" href="{% url 'articles:delete' article.pk %}">삭제하기</a>
+  <div class="d-flex justify-content-end mx-3">
+  <a class="btn btn-info btn-sm" href="{% url 'articles:update' article.pk %}">수정하기</a>
+  {% comment %} a태그는 GET요청만 가능
+  <a class="btn btn-danger btn-sm" href="{% url 'articles:delete' article.pk %}">삭제하기</a> {% endcomment %}
+  <form class="mx-1 d-inline-block" action="{% url 'articles:delete' article.pk %}" method="POST" onclick="return confirm('진짜 지움?')">
+    {% csrf_token %}
+    <input class="btn btn-danger btn-sm" type="submit" value="삭제하기">
+    </form>
   <a class="btn btn-secondary btn-sm" href="{% url 'articles:index' %}">목록으로</a>
+  </div>
 {% endblock %}

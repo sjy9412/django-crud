@@ -1,4 +1,8 @@
 from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
+# 중간에 embed를 사용하면 ipython을 이용하여 중간 값을 확인할 수 있다.
+# from IPython import embed
+
 from .models import Article
 
 # Create your views here.
@@ -7,19 +11,23 @@ def index(request):
     context = {
         'articles': articles
     }
+    # embed()
     return render(request, 'articles/index.html', context)
 
-def new(request):
-    return render(request, 'articles/new.html')
+# def new(request):
+#     return render(request, 'articles/new.html')
 
 def create(request):
-    title = request.POST.get('title')
-    content = request.POST.get('content')
-    article = Article.objects.create(title=title, content=content)
-    context = {
-        'article': article
-    }
-    return redirect('articles:detail', article.pk)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        article = Article.objects.create(title=title, content=content)
+        # context = {
+        #     'article': article
+        # }
+        return redirect('articles:detail', article.pk)
+    else:
+        return render(request, 'articles/new.html')
 
 def detail(request, article_pk):
     article = Article.objects.get(pk=article_pk)
@@ -28,21 +36,33 @@ def detail(request, article_pk):
     }
     return render(request, 'articles/detail.html', context)
 
+@require_POST
+# require_POST를 사용하면 if문을 사용하지 않아도 됌
 def delete(request, article_pk):
     article = Article.objects.get(pk=article_pk)
+    # if request.method == 'POST':
     article.delete()
     return redirect('articles:index')
+    # else:
+    #     return redirect('articles:detail', article.pk)
 
-def edit(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
-    context = {
-        'article': article
-    }
-    return render(request, 'articles/edit.html', context)
+
+# def edit(request, article_pk):
+#     article = Article.objects.get(pk=article_pk)
+#     context = {
+#         'article': article
+#     }
+#     return render(request, 'articles/edit.html', context)
 
 def update(request, article_pk):
     article = Article.objects.get(pk=article_pk)
-    content = request.POST.get('content')
-    article.content = content
-    article.save()
-    return redirect('articles:detail', article.pk)
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        article.content = content
+        article.save()
+        return redirect('articles:detail', article.pk)
+    else:
+        context = {
+        'article': article
+        }
+        return render(request, 'articles/edit.html', context)

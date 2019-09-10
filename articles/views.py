@@ -19,7 +19,7 @@ def create(request):
     context = {
         'article': article
     }
-    return redirect(f'/articles/{article.pk}')
+    return redirect('articles:detail', article.pk)
 
 def detail(request, article_pk):
     article = Article.objects.get(pk=article_pk)
@@ -31,7 +31,7 @@ def detail(request, article_pk):
 def delete(request, article_pk):
     article = Article.objects.get(pk=article_pk)
     article.delete()
-    return redirect('/articles/')
+    return redirect('articles:index')
 
 def edit(request, article_pk):
     article = Article.objects.get(pk=article_pk)
@@ -45,4 +45,4 @@ def update(request, article_pk):
     content = request.GET.get('content')
     article.content = content
     article.save()
-    return redirect(f'/articles/{article.pk}/')
+    return redirect('articles:detail', article.pk)

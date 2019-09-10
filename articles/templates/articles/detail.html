@@ -6,7 +6,7 @@
   <p>수정일자 : {{ article.updated_at }}</p>
   <hr>
   <p>{{ article.content }}</p>
-  <a class="btn btn-info btn-sm" href="/articles/{{ article.pk }}/edit/">수정하기</a>
-  <a class="btn btn-danger btn-sm" href="/articles/{{ article.pk }}/delete/">삭제하기</a>
-  <a class="btn btn-secondary btn-sm" href="/articles/">목록으로</a>
+  <a class="btn btn-info btn-sm" href="{% url 'articles:edit' article.pk %}">수정하기</a>
+  <a class="btn btn-danger btn-sm" href="{% url 'articles:delete' article.pk %}">삭제하기</a>
+  <a class="btn btn-secondary btn-sm" href="{% url 'articles:index' %}">목록으로</a>
 {% endblock %}

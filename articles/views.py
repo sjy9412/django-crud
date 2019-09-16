@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 # 중간에 embed를 사용하면 ipython을 이용하여 중간 값을 확인할 수 있다.
 # from IPython import embed
 
@@ -34,7 +35,7 @@ def detail(request, article_pk):
     comments = article.comment_set.all()
     context = {
         'article': article, 
-        'comments': comments
+        'comments': comments,
     }
     return render(request, 'articles/detail.html', context)
 
@@ -72,4 +73,12 @@ def update(request, article_pk):
 @require_POST
 def comment_create(request, article_pk):
     comment = Comment.objects.create(content=request.POST.get('comment'), article_id = article_pk)
+    messages.success(request, '댓글이 생성되었습니다.')
+    return redirect('articles:detail', article_pk)
+
+@require_POST
+def comment_delete(request, article_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    comment.delete()
+    messages.success(request, '댓글이 삭제되었습니다.')
     return redirect('articles:detail', article_pk)

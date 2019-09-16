@@ -5,13 +5,19 @@
   <p class="text-right" style="font-size:0.8rem">작성일자 : {{ article.created_at }}</p>
   <p class="text-right" style="font-size:0.8rem">수정일자 : {{ article.updated_at }}</p>
   <hr>
-  <h3 class="m-3">{{ article.content }}</h3>
+  <h3 class="my-3">{{ article.content }}</h3>
   <hr>
   <h5>댓글 [{{comments.count}}]</h5>
   <div class="m-2 mt-3">
   {% for comment in comments %}
   <p>{{comment.content}}</p>
-  <p class="text-right">{{comment.created_at}}</p>
+  <div class="d-flex justify-content-end">
+  <p class="d-inline mr-2">{{comment.created_at}}</p>
+  <form class="mx-1 d-inline-block" action="{% url 'articles:comment_delete' article.pk comment.pk %}" method="POST" onclick="return confirm('삭제하시겠습니까?')">
+    {% csrf_token %}
+    <input class="btn btn-danger btn-sm" type="submit" value="삭제하기">
+  </form>
+  </div>
   {% empty %}
     <p>댓글을 작성해 주세요.</p>
   {% endfor %}
@@ -22,13 +28,13 @@
   -->
   </div>
   <hr>
-  <form class="mb-3 mr-3" action="/articles/{{article.pk}}/comment_create/" method="POST">
+  <form class="mb-3 mr-3" action="{% url 'articles:comment_create' article.pk %}" method="POST">
     {% csrf_token %}
     <div class="form-row">
-    <div class="col-10">
+    <div class="col-11">
       <input class="form-control" type="text" name='comment'>
     </div>
-    <div class="col-2">
+    <div class="col-1">
       <input class="btn btn-secondary" type="submit" value="댓글 달기">
     </div>
   </div>

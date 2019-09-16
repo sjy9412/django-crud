@@ -3,7 +3,7 @@ from django.views.decorators.http import require_POST
 # 중간에 embed를 사용하면 ipython을 이용하여 중간 값을 확인할 수 있다.
 # from IPython import embed
 
-from .models import Article
+from .models import Article, Comment
 
 # Create your views here.
 def index(request):
@@ -31,8 +31,10 @@ def create(request):
 
 def detail(request, article_pk):
     article = Article.objects.get(pk=article_pk)
+    comments = article.comment_set.all()
     context = {
-        'article': article
+        'article': article, 
+        'comments': comments
     }
     return render(request, 'articles/detail.html', context)
 
@@ -66,3 +68,8 @@ def update(request, article_pk):
         'article': article
         }
         return render(request, 'articles/edit.html', context)
+
+@require_POST
+def comment_create(request, article_pk):
+    comment = Comment.objects.create(content=request.POST.get('comment'), article_id = article_pk)
+    return redirect('articles:detail', article_pk)

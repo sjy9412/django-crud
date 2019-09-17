@@ -31,10 +31,10 @@
   <form class="mb-3 mr-3" action="{% url 'articles:comment_create' article.pk %}" method="POST">
     {% csrf_token %}
     <div class="form-row">
-    <div class="col-11">
+    <div class="col-10">
       <input class="form-control" type="text" name='comment'>
     </div>
-    <div class="col-1">
+    <div  class="col-2">
       <input class="btn btn-secondary" type="submit" value="댓글 달기">
     </div>
   </div>

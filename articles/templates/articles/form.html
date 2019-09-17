@@ -1,5 +1,10 @@
 {% extends 'articles/base.html' %}
 {% block body %}
+{% if request.resolver_match.url_name == 'create' %}
+  <h1 class="mt-3 text-center">글 작성하기</h1>
+{% else %}
+  <h1 class="mt-3 text-center">글 수정하기</h1>
+{% endif %}
 <form action="" method="POST">
   {% csrf_token %}
   {{ article_form.as_p }}

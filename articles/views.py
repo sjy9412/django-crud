@@ -24,7 +24,7 @@ def create(request):
     if request.method == 'POST':
         # title = request.POST.get('title')
         # content = request.POST.get('content')
-        article_form = ArticleForm(request.POST)
+        article_form = ArticleForm(request.POST, request.FILES)
         # embed()
         # 검증에 성공하면 저장하고, (검사에서 max_length를 바꾸고 입력할 수 있어서)
         if article_form.is_valid():
@@ -84,11 +84,12 @@ def update(request, article_pk):
     article = Article.objects.get(pk=article_pk)
     if request.method == 'POST':
         # instance값을 줘서 수정가능하도록
-        article_form = ArticleForm(request.POST, instance=article)
+        article_form = ArticleForm(request.POST, request.FILES, instance=article)
         if article_form.is_valid():
             # content = article_form.cleaned_data.get('content')
             # article.content = content
             # article.save()
+            article.image = request.FILES.get('image')
             article = article_form.save()
             return redirect('articles:detail', article.pk)
     else:

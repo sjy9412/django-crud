@@ -10,6 +10,7 @@ class Article(models.Model):
     # CharField - 필수인자로 max_length 지정
     title = models.CharField(max_length=10)
     content = models.TextField()
+    image = models.ImageField(blank=True)
     # DataTime Field
     #   auto_now_add : 생성시 자동으로 저장
     #   auto_now : 수정시마다 자동을 저장

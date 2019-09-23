@@ -1,5 +1,5 @@
-{% comment %} extends는 항상 제일 위에 {% endcomment %}
 {% extends 'articles/base.html' %}
+{% comment %} extends는 항상 제일 위에 {% endcomment %}
 {% block body %}
 {% comment %} load는 base에서 불러 올 수 없으므로 해당 template에 넣어야한다. {% endcomment %}
 {% load bootstrap4 %}
@@ -8,7 +8,7 @@
 {% else %}
   <h1 class="mt-3 text-center">글 수정하기</h1>
 {% endif %}
-<form action="" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   {% bootstrap_form  article_form %}
   {% buttons %}

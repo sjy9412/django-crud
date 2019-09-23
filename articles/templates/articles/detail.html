@@ -7,6 +7,9 @@
   <p class="text-right" style="font-size:0.8rem">수정일자 : {{ article.updated_at }}</p>
   <hr>
   <h3 class="my-3">{{ article.content }}</h3>
+  {% if article.image %}
+  <img src="{{ article.image.url }}" alt="{{ article.image.name }}">
+  {% endif %}
   <hr>
   <h5>댓글 [{{comments.count}}]</h5>
   <div class="m-2 mt-3">

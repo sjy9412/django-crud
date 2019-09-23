@@ -1,4 +1,6 @@
 from django.db import models
+from imagekit.models import ProcessedImageField, ImageSpecField
+from imagekit.processors import ResizeToFill
 
 # Create your models here.
 # 1. 모델(스키마) 정의
@@ -11,6 +13,15 @@ class Article(models.Model):
     title = models.CharField(max_length=10)
     content = models.TextField()
     image = models.ImageField(blank=True)
+    # ImageSpecField : Input 하나만 받고 처리해서 저장
+    # ProcessedImageField : Input 받은 것을 처리해서 저장
+    # resize to fill : 300 * 300
+    # resize to fit : 긴쪽을(너비 혹은 높이) 300에 맞추고 비율에 맞게 자름
+    image_thumbnail = ImageSpecField(
+        processors=[ResizeToFill(300, 300)],
+        format='JPEG',
+        options={'quality': 80}
+    )
     # DataTime Field
     #   auto_now_add : 생성시 자동으로 저장
     #   auto_now : 수정시마다 자동을 저장

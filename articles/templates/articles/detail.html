@@ -1,5 +1,6 @@
 {% extends 'articles/base.html' %}
 {% block body %}
+{% load bootstrap4 %}
   <h1 class='text-center mt-3'>{{ article.title }}</h1>
   <p class="text-right" style="font-size:0.8rem" class='id'>{{ article.id }}번 글</p>
   <p class="text-right" style="font-size:0.8rem">작성일자 : {{ article.created_at }}</p>
@@ -28,16 +29,13 @@
   -->
   </div>
   <hr>
-  <form class="mb-3 mr-3" action="{% url 'articles:comment_create' article.pk %}" method="POST">
+  <form action="{% url 'articles:comment_create' article.pk %}" method="POST">
+  {% comment %} <form class="mb-3 mr-3" action="{% url 'articles:comment_create' article.pk %}" method="POST"> {% endcomment %}
     {% csrf_token %}
-    <div class="form-row">
-    <div class="col-10">
-      <input class="form-control" type="text" name='comment'>
-    </div>
-    <div  class="col-2">
+      {% bootstrap_form  comment_form %}
+      {% buttons %}
       <input class="btn btn-secondary" type="submit" value="댓글 달기">
-    </div>
-  </div>
+      {% endbuttons %}
   </form>
   <div class="d-flex justify-content-center mt-5">
   <a class="btn btn-info btn-sm" href="{% url 'articles:update' article.pk %}">수정하기</a>

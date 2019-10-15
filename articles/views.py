@@ -1,5 +1,6 @@
 # from IPython import embed
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 # 중간에 embed를 사용하면 ipython을 이용하여 중간 값을 확인할 수 있다.
@@ -20,6 +21,7 @@ def index(request):
 # def new(request):
 #     return render(request, 'articles/new.html')
 
+@login_required
 def create(request):
     if request.method == 'POST':
         # title = request.POST.get('title')
@@ -48,6 +50,7 @@ def create(request):
         'article_form': article_form
     }
     return render(request, 'articles/form.html', context)
+
 
 def detail(request, article_pk):
     # article = Article.objects.get(pk=article_pk)

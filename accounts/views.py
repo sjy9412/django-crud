@@ -5,10 +5,14 @@ from django.contrib.auth import logout as auth_logout
 
 # Create your views here.
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('articles:index')
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            # 회원가입하고 바로 로그인 되게 해준다
+            auth_login(request, user)
             return redirect('articles:index')
     else:    
         form = UserCreationForm()
@@ -22,7 +26,7 @@ def login(request):
         form = AuthenticationForm(request, request.POST) # 모델 form이 아님
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect('articles:index')
+            return redirect(request.GET.get('next') or 'articles:index')
     else:
         form = AuthenticationForm() 
     context = {

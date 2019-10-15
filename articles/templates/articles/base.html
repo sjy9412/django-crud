@@ -11,7 +11,7 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   -->
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-  <link rel="icon" type="image/png" sizes="32*32" href="{% static 'favicon/favicon-36*36.png' %}">
+  <link rel="icon" type="image/png" sizes="96*96" href="{% static 'favicon/favicon-96*96.png' %}">
   <link rel="shortcut icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon">
     {% block css %}
     {% endblock %}
@@ -30,6 +30,8 @@
         <a class="nav-item nav-link" href="#">Features</a>
         <a class="nav-item nav-link" href="#">Pricing</a>
         <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          <!-- request 안에 user가 있어서 따로 불러오지 않아도 사용이 가능(로그인과 관련된 모든 정보는 request에 있음) -->
+          <a class="nav-link">{{ user.username }}</a></p>
       </div>
     </div>
   </nav>

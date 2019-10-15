@@ -108,6 +108,7 @@ def comment_create(request, article_pk):
     if comment_form.is_valid():
         # 3. 맞으면 저장
         # 3-1. 사용자 입력값으로 comment instance 생성(저장은 X)
+        # 그냥 저장하면 Not null constraint 오류 발생 (FK가 없어서)
         comment = comment_form.save(commit=False)
         # 3-2. FK 넣고 저장
         comment.article = article

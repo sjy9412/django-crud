@@ -5,6 +5,7 @@
   <p class="text-right" style="font-size:0.8rem" class='id'>{{ article.id }}번 글</p>
   <p class="text-right" style="font-size:0.8rem">작성일자 : {{ article.created_at }}</p>
   <p class="text-right" style="font-size:0.8rem">수정일자 : {{ article.updated_at }}</p>
+  <p class="text-right" style="font-size:0.8rem">작성자 : {{ article.user }}</p>
   <hr>
   <h3 class="my-3">{{ article.content }}</h3>
   {% if article.image_thumbnail %}
@@ -16,11 +17,14 @@
   {% for comment in comments %}
   <p>{{comment.content}}</p>
   <div class="d-flex justify-content-end">
-  <p class="d-inline mr-2">{{comment.created_at}}</p>
-  <form class="mx-1 d-inline-block" action="{% url 'articles:comment_delete' article.pk comment.pk %}" method="POST" onclick="return confirm('삭제하시겠습니까?')">
+  <p class="d-inline mr-2">작성자: {{comment.user}} &nbsp; &nbsp; </p>
+  <p class="d-inline mr-2">작성일: {{comment.created_at}}</p>
+  {% if comment.user == user %}
+  <form class="mx-1 d-inline-block-outline" action="{% url 'articles:comment_delete' article.pk comment.pk %}" method="POST" onclick="return confirm('삭제하시겠습니까?')">
     {% csrf_token %}
     <input class="btn btn-danger btn-sm" type="submit" value="삭제하기">
   </form>
+  {% endif %}
   </div>
   {% empty %}
     <p>댓글을 작성해 주세요.</p>
@@ -41,13 +45,21 @@
       {% endbuttons %}
   </form>
   <div class="d-flex justify-content-center mt-5">
+  {% if article.user == user %}
   <a class="btn btn-info btn-sm" href="{% url 'articles:update' article.pk %}">수정하기</a>
+  {% else %}
+  <a class="btn btn-info btn-sm disabled" href="{% url 'articles:update' article.pk %}">수정하기</a>
+  {% endif %}
   {% comment %} a태그는 GET요청만 가능
   <a class="btn btn-danger btn-sm" href="{% url 'articles:delete' article.pk %}">삭제하기</a> {% endcomment %}
+  {% if article.user == user %}
   <form class="mx-1 d-inline-block" action="{% url 'articles:delete' article.pk %}" method="POST" onclick="return confirm('삭제하시겠습니까?')">
     {% csrf_token %}
     <input class="btn btn-danger btn-sm" type="submit" value="삭제하기">
     </form>
+    {% else %}
+    <input class="mx-1 d-inline-block btn btn-danger btn-sm" disabled  type="submit" value="삭제하기">
+    {% endif %}
   <a class="btn btn-secondary btn-sm" href="{% url 'articles:index' %}">목록으로</a>
   </div>
 {% endblock %}

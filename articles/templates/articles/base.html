@@ -31,7 +31,9 @@
         <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         <!-- 로그인이 되어 있다면, -->
         {% if user.is_authenticated %}
+        {% load gravata %}
         <!-- request 안에 user가 있어서 따로 불러오지 않아도 사용이 가능(로그인과 관련된 모든 정보는 request에 있음) -->
+        <img src="{{ user.email |makehash }}" alt="">
         <a class="nav-item nav-link">{{ user.username }}</a>
         <a class="nav-item nav-link" href={% url 'accounts:logout' %}>로그아웃</a>
         <!-- 로그인이 되어 있지 않다면,  -->

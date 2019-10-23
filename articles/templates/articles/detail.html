@@ -6,6 +6,13 @@
   <p class="text-right" style="font-size:0.8rem">작성일자 : {{ article.created_at }}</p>
   <p class="text-right" style="font-size:0.8rem">수정일자 : {{ article.updated_at }}</p>
   <p class="text-right" style="font-size:0.8rem">작성자 : {{ article.user }}</p>
+  <p class="text-right" style="font-size:0.8rem">좋아요 : {{ article.like_users.count }}명  &nbsp; 
+    {% if user in article.like_users.all %}
+    <a href="{% url 'articles:like' article.pk %}"><i class="fas fa-heart fa-2x" style="color: crimson;"></i></a>
+    {% else %}
+    <a href="{% url 'articles:like' article.pk %}"><i class="far fa-heart fa-2x" style="color: crimson;"></i></a>
+    {% endif %}
+  </p>
   <hr>
   <h3 class="my-3">{{ article.content }}</h3>
   {% if article.image_thumbnail %}
@@ -44,7 +51,7 @@
       <input class="btn btn-secondary" type="submit" value="댓글 달기">
       {% endbuttons %}
   </form>
-  <div class="d-flex justify-content-center mt-5">
+  <div class="d-flex justify-content-center my-5">
   {% if article.user == user %}
   <a class="btn btn-info btn-sm" href="{% url 'articles:update' article.pk %}">수정하기</a>
   {% else %}

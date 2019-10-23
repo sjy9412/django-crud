@@ -27,7 +27,7 @@ class ArticleForm(forms.ModelForm):
     )
     class Meta:
         model = Article
-        exclude = ('user',)
+        fields = ('title', 'content', 'image')
         # fields = ('title')
         # exclude = ('title')
         # 두번째 방법

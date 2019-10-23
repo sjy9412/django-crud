@@ -1,0 +1,36 @@
+{% extends 'articles/base.html' %}
+{% block body %}
+{% load gravata %}
+<div class='container my-3'>
+  <h1>{{ user_profile.username }}의 프로필</h1>
+  {% if user == user_profile %}
+  <div class='row'>
+    <div class='col'>
+      <img src="{{ user.email |makehash }}" alt="">
+    </div>
+    <div class='col'>
+      <div class='container my-3'>
+        <h3>작성한 글 [{{ user.article_set.count }}]</h3>
+        {% for article in user.article_set.all %}
+        <a href="{% url 'articles:detail' article.pk %}">{{ article.title }}</a><br>
+        {% endfor %}
+      </div>
+      <div class='container my-3'>
+        <h3>작성한 댓글 [{{ user.comment_set.count }}]</h3>
+        {% for comment in user.comment_set.all %}
+        <a href="{% url 'articles:detail' comment.article_id %}">
+          [{{ comment.article.title }}] 글의 [{{ comment.content }}]
+        </a><br>
+        {% endfor %}
+      </div>
+      <div class='container my-3'>
+        <h3>좋아요한 글 [{{ user.like_articles.count }}]</h3>
+        {% for article in user.like_articles.all %}
+        <a href="{% url 'articles:detail' article.pk %}">{{ article.title }}</a><br>
+        {% endfor %}
+        {% endif %}
+        {% endblock%}
+      </div>
+</div>
+</div>
+</div>

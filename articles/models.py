@@ -30,6 +30,8 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # settings.AUTH_USER_MODEL : 'accounts.User' (str)
+    # related_name 반드시 해야한다! (user.article_set.all()하면 settings.AUTH_USER_MODEL을 두 군데서 사용하기 때문))
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_articles', blank=True)
 
     def __str__(self):
         return f'<{self.id}> {self.title}'

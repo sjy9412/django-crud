@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 # from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 # 중간에 embed를 사용하면 ipython을 이용하여 중간 값을 확인할 수 있다.
 # from IPython import embed
 
@@ -56,7 +56,7 @@ def create(request):
     }
     return render(request, 'articles/form.html', context)
 
-
+@login_required
 def detail(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
     # 해당 url이 없을 때 500 error가 아닌 404  error가 뜨도록
@@ -115,27 +115,30 @@ def update(request, article_pk):
 
 @require_POST
 def comment_create(request, article_pk):
-    article = get_object_or_404(Article, pk=article_pk)
-    # 1. modelform에 사용자 입력값 넣고
-    comment_form = CommentForm(request.POST)
-    # 2. 검증하고, 
-    if comment_form.is_valid():
-        # 3. 맞으면 저장
-        # 3-1. 사용자 입력값으로 comment instance 생성(저장은 X)
-        # 그냥 저장하면 Not null constraint 오류 발생 (FK가 없어서)
-        comment = comment_form.save(commit=False)
-        # 3-2. FK 넣고 저장
-        comment.article = article
-        comment.user = request.user
-        comment.save()
-        messages.success(request, '댓글이 생성되었습니다.')
+    if request.user.is_authenticated:
+        article = get_object_or_404(Article, pk=article_pk)
+        # 1. modelform에 사용자 입력값 넣고
+        comment_form = CommentForm(request.POST)
+        # 2. 검증하고, 
+        if comment_form.is_valid():
+            # 3. 맞으면 저장
+            # 3-1. 사용자 입력값으로 comment instance 생성(저장은 X)
+            # 그냥 저장하면 Not null constraint 오류 발생 (FK가 없어서)
+            comment = comment_form.save(commit=False)
+            # 3-2. FK 넣고 저장
+            comment.article = article
+            comment.user = request.user
+            comment.save()
+            messages.success(request, '댓글이 생성되었습니다.')
+        else:
+            messages.success(request, '댓글 형식이 맞지 않습니다.')
+        # 4. return redirect
+        return redirect('articles:detail', article_pk)
+        # comment = Comment.objects.create(content=request.POST.get('comment'), article_id = article_pk)
+        # messages.success(request, '댓글이 생성되었습니다.')
+        # return redirect('articles:detail', article_pk)
     else:
-        messages.success(request, '댓글 형식이 맞지 않습니다.')
-    # 4. return redirect
-    return redirect('articles:detail', article_pk)
-    # comment = Comment.objects.create(content=request.POST.get('comment'), article_id = article_pk)
-    # messages.success(request, '댓글이 생성되었습니다.')
-    # return redirect('articles:detail', article_pk)
+        return HttpResponse ('Unauthorized', status=401)
 
 @require_POST
 def comment_delete(request, article_pk, comment_pk):
@@ -147,3 +150,13 @@ def comment_delete(request, article_pk, comment_pk):
     else:
         # raise PermissionDenied 
         return HttpResponseForbidden()
+
+@login_required
+def like(request, article_pk):
+    article = Article.objects.get(pk=article_pk)
+    user = request.user
+    if user in article.like_users.all():
+        article.like_users.remove(user)
+    else:
+        article.like_users.add(user)
+    return redirect('articles:detail', article_pk)

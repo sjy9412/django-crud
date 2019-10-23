@@ -81,3 +81,12 @@ def profile(request, account_pk):
         'user_profile': user
     }
     return render(request, 'accounts/profile.html', context)
+
+def follow(request, account_pk):
+    friend = get_object_or_404(get_user_model(), pk=account_pk)
+    if friend != request.user:
+        if friend in request.user.followings.all():
+            request.user.followings.remove(friend)
+        else:
+            request.user.followings.add(friend)
+    return redirect('accounts:profile', account_pk)

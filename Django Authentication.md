@@ -31,7 +31,7 @@
    AUTH_USER_MODEL = 'accounts.User'
    ```
 
-   * `User` 클래스를 활요하는 경우에는 `get_user_model()`을 함수를 호출하여 사용
+   * `User` 클래스를 활용하는 경우에는 `get_user_model()`을 함수를 호출하여 사용
 
      ```python
      # accounts/forms.py
@@ -42,7 +42,7 @@
              model = get_user_model()
      ```
 
-   * 단, `models.py`에서 사요하는 경우에는 `settings.AUTH_USER_MODEL`을 활용
+   * 단, `models.py`에서 사용하는 경우에는 `settings.AUTH_USER_MODEL`을 활용
 
      ```python
      # articles/models.py
@@ -54,9 +54,9 @@
 
 3.  `admin.py`
 
-   * admin 페이지를 활용하기 위해서는 직접 자성을 해야한다.
+   * admin 페이지를 활용하기 위해서는 직접 작성을 해야한다.
 
-   * `UserAdmin` 설정을 그대로 활요할 수 있다.
+   * `UserAdmin` 설정을 그대로 활용할 수 있다.
 
      ```python
      # accounts/admin.py

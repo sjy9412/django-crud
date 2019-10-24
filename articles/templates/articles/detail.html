@@ -14,7 +14,8 @@
     {% endif %}
   </p>
   <hr>
-  <h3 class="my-3">{{ article.content }}</h3>
+  {% load hashtag %}
+  <h3 class="my-3">{{ article|make_link|safe|linebreaksbr }}</h3>
   {% if article.image_thumbnail %}
   <img src="{{ article.image_thumbnail.url }}" alt="{{ article.image_thumbnail.name }}">
   {% endif %}
@@ -22,7 +23,7 @@
   <h5>댓글 [{{comments.count}}]</h5>
   <div class="m-2 mt-3">
   {% for comment in comments %}
-  <p>{{comment.content}}</p>
+  <p>{{ comment.content|linebreaksbr }}</p>
   <div class="d-flex justify-content-end">
   <p class="d-inline mr-2">작성자: {{comment.user}} &nbsp; &nbsp; </p>
   <p class="d-inline mr-2">작성일: {{comment.created_at}}</p>

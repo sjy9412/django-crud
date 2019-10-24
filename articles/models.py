@@ -4,6 +4,13 @@ from imagekit.processors import ResizeToFill
 from django.conf import settings
 
 # Create your models here.
+
+class HashTag(models.Model):
+    content = models.TextField(unique=True)
+    
+    def __str__(self):
+        return self.content
+
 # 1. 모델(스키마) 정의
 # 데이터베이스 테이블을 정의하고
 # 각각의 컬럼(필드) 정의
@@ -32,6 +39,7 @@ class Article(models.Model):
     # settings.AUTH_USER_MODEL : 'accounts.User' (str)
     # related_name 반드시 해야한다! (user.article_set.all()하면 settings.AUTH_USER_MODEL을 두 군데서 사용하기 때문))
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_articles', blank=True)
+    hashtags = models.ManyToManyField(HashTag, blank=True)
 
     def __str__(self):
         return f'<{self.id}> {self.title}'

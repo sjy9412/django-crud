@@ -1,0 +1,9 @@
+{% extends 'articles/base.html' %}
+{% block body %}
+<h1>{{ hashtag.content }}</h1>
+{% for article in hashtag.article_set.all %}
+<a href="{% url 'articles:detail' article.pk %}">
+  <p> {{ article.title }}</p>
+</a>
+{% endfor %}
+{% endblock %}

@@ -3,13 +3,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
-# from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden, HttpResponse
 # 중간에 embed를 사용하면 ipython을 이용하여 중간 값을 확인할 수 있다.
 # from IPython import embed
 
 from django.contrib.auth import get_user_model
-from .models import Article, Comment
+from .models import Article, Comment, HashTag
 from .forms import ArticleForm, CommentForm
 
 # Create your views here.
@@ -39,6 +39,12 @@ def create(request):
             article = article_form.save(commit=False)
             article.user = request.user
             article.save()
+            # 해시태그 저장 및 연결 작업(save하고 나서 해야함)
+            for word in article.content.split():
+                if word.startswith('#'):
+                    hashtag, create = HashTag.objects.get_or_create(content=word)
+                    article.hashtags.add(hashtag)    
+
             # context = {
             #     'article': article
             # }
@@ -73,8 +79,8 @@ def detail(request, article_pk):
 @require_POST
 # require_POST를 사용하면 if문을 사용하지 않아도 됌
 def delete(request, article_pk):
+    article = Article.objects.get(pk=article_pk)
     if article.user == request.user:
-        article = Article.objects.get(pk=article_pk)
         # if request.method == 'POST':
         article.delete()
         return redirect('articles:index')
@@ -103,6 +109,12 @@ def update(request, article_pk):
                 # article.save()
                 article.image = request.FILES.get('image')
                 article = article_form.save()
+                # 해시태그 수정
+                article.hashtags.clear()
+                for word in article.content.split():
+                    if word.startswith('#'):
+                        hashtag, create = HashTag.objects.get_or_create(content=word)
+                        article.hashtags.add(hashtag)   
                 return redirect('articles:detail', article.pk)
         else:
             article_form = ArticleForm(instance=article)
@@ -160,3 +172,10 @@ def like(request, article_pk):
     else:
         article.like_users.add(user)
     return redirect('articles:detail', article_pk)
+
+def hashtag(request, tag_pk):
+    hashtag = get_object_or_404(HashTag, pk=tag_pk)
+    context = {
+        'hashtag': hashtag
+    }
+    return render(request, 'articles/hashtag.html', context)

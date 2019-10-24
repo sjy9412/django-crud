@@ -3,16 +3,18 @@
 {% load gravatar %}
 {% comment %} {% with user_profile.followings.all as followings %} {% endcomment %}
 <div class='container my-3'>
-  <h1 class='d-inline'>{{ user_profile.username }}의 프로필</h1>
-  <h4 class="d-inline mx-3">팔로우 : {{ user_profile.followings.count }}</h4>
-  <h4 class="d-inline mx-3">팔로워 : {{ user_profile.followers.count }}</h4>
-  {% if user != user_profile %}
-  {% if user_profile in user.followings.all %} 
-  <a class='mx-3 btn btn-warning btn-lg' href="{% url 'accounts:follow' user_profile.pk %}">팔로우 취소</a>
-  {% else %}
-  <a class='mx-3 btn btn-outline-warning btn-lg' href="{% url 'accounts:follow' user_profile.pk %}">팔로우 하기</a>
-  {% endif %}
-  {% endif %}
+  <div class='text-center'>
+    <h1 class='d-inline '>{{ user_profile.username }}의 프로필</h1>
+    <h4 class="d-inline mx-3">팔로우 : {{ user_profile.followings.count }}</h4>
+    <h4 class="d-inline mx-3">팔로워 : {{ user_profile.followers.count }}</h4>
+    {% if user != user_profile %}
+    {% if user_profile in user.followings.all %} 
+    <a class='mx-3 btn btn-warning btn-lg' href="{% url 'accounts:follow' user_profile.pk %}">팔로우 취소</a>
+    {% else %}
+    <a class='mx-3 btn btn-outline-warning btn-lg' href="{% url 'accounts:follow' user_profile.pk %}">팔로우 하기</a>
+    {% endif %}
+    {% endif %}
+  </div>
   <div class='row'>
     <div class='col'>
       <img src="{{ user_profile.email |profile }}" alt="" class='d-block mx-auto my-5'>

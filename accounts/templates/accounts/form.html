@@ -1,10 +1,13 @@
 {% extends 'articles/base.html' %}
 {% load bootstrap4 %}
+{% load socialaccount %}
+
 {% block body %}
 <form action="" method="POST" class="form">
   {% csrf_token %}
   {% bootstrap_form  form %}
   {% buttons %}
+  <a href="{% provider_login_url "kakao" %}">카카오 로그인</a>
   <button type="submit" class="btn btn-primary">저장</button>
   {% endbuttons %}
 </form>

@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'django_extensions',
     'bootstrap4',
     'imagekit',
+    # all-auth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +145,10 @@ MEDIA_URL = '/media/'
 # AUTH
 LOGIN_URL = '/accounts/login/' # default! @login_required에서 login이 되지 않았을 때 이동하는 경로
 AUTH_USER_MODEL = 'accounts.User' # default 'auth.User'
+
+# django-allauth
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+SITE_ID = 1 #django.dontrib.sites -> SITE_ID 부여
+LOGIN_REDIRECT_URL = 'articles:index'

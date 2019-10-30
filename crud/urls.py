@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('articles/', include('articles.urls')),
     path('accounts/', include('accounts.urls')),
+    path('accounts/', include('allauth.urls')), # 반드시 기존 accounts app 밑에(우리가 만든 url로 넘어가게 하기위해)
     path('hashtags/<int:tag_pk>/', views.hashtag, name='hashtag')
 ]
 

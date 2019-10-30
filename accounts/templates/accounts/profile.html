@@ -17,7 +17,7 @@
   </div>
   <div class='row'>
     <div class='col'>
-      <img src="{{ user_profile.email |profile }}" alt="" class='d-block mx-auto my-5'>
+      <img src="{{ user_profile |makehash }}" alt="" class='d-block mx-auto my-5'>
     </div>
     <div class='col'>
         {% if user == user_profile %}

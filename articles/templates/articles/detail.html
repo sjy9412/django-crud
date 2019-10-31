@@ -6,13 +6,17 @@
   <p class="text-right" style="font-size:0.8rem">작성일자 : {{ article.created_at }}</p>
   <p class="text-right" style="font-size:0.8rem">수정일자 : {{ article.updated_at }}</p>
   <p class="text-right" style="font-size:0.8rem">작성자 : {{ article.user }}</p>
-  <p class="text-right" style="font-size:0.8rem">좋아요 : {{ article.like_users.count }}명  &nbsp; 
+  <p class="text-right" style="font-size:0.8rem">좋아요 : <span id="cnt">{{ article.like_users.count }}명</span>
     {% if user in article.like_users.all %}
-    <a href="{% url 'articles:like' article.pk %}"><i class="fas fa-heart fa-2x" style="color: crimson;"></i></a>
+    {% comment %} <a href="{% url 'articles:like' article.pk %}"> {% endcomment %}
+    <i id='like-button' data-id="{{article.id}}" class="fas fa-heart fa-2x" style="color: crimson;"></i>
+    {% comment %} </a> {% endcomment %}
     {% else %}
-    <a href="{% url 'articles:like' article.pk %}"><i class="far fa-heart fa-2x" style="color: crimson;"></i></a>
+    {% comment %} <a href="{% url 'articles:like' article.pk %}"> {% endcomment %}
+    <i id='like-button' data-id="{{article.id}}" class="far fa-heart fa-2x" style="color: crimson;"></i>
+    {% comment %} </a> {% endcomment %}
     {% endif %}
-  </p>
+    </p>
   <hr>
   {% load hashtag %}
   <h3 class="my-3">{{ article|make_link|safe|linebreaksbr }}</h3>
@@ -70,4 +74,27 @@
     {% endif %}
   <a class="btn btn-secondary btn-sm" href="{% url 'articles:index' %}">목록으로</a>
   </div>
+{% endblock %}
+{% block script %}
+<script>
+  const likeButton = document.querySelector('#like-button')
+  likeButton.addEventListener('click', function(event){
+      console.log(event.target.dataset.id)
+      axios.get(`/articles/${event.target.dataset.id}/like/`)
+        .then(response => {
+          const cnt = document.querySelector('#cnt')
+          console.log(response)
+          console.log(response.data.is_liked)
+          cnt.innerText = `${response.data.count}`
+          if (response.data.is_liked) {
+          event.target.classList.remove('fas')
+          event.target.classList.add('far')
+          }
+          else {
+            event.target.classList.remove('far')
+          event.target.classList.add('fas')
+          }
+        })
+    })
+</script>
 {% endblock %}

@@ -166,18 +166,21 @@ def comment_delete(request, article_pk, comment_pk):
 from django.http import JsonResponse
 @login_required
 def like(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
-    user = request.user
-    if user in article.like_users.all():
-        # 좋아요 취소 로직
-        article.like_users.remove(user)
-        is_liked = True
+    if request.is_ajax():
+        article = Article.objects.get(pk=article_pk)
+        user = request.user
+        if user in article.like_users.all():
+            # 좋아요 취소 로직
+            article.like_users.remove(user)
+            is_liked = True
+        else:
+            # 좋아요 로직
+            article.like_users.add(user)
+            is_liked = False
+        count =  article.like_users.count()
+        return JsonResponse({'count': count, 'is_liked': is_liked})
     else:
-        # 좋아요 로직
-        article.like_users.add(user)
-        is_liked = False
-    count =  article.like_users.count()
-    return JsonResponse({'count': count, 'is_liked': is_liked})
+        return HttpResponseForbidden()
 
 def hashtag(request, tag_pk):
     hashtag = get_object_or_404(HashTag, pk=tag_pk)
